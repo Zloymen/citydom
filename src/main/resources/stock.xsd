@@ -3,6 +3,7 @@
            targetNamespace="http://citydom.ru/stock"
            elementFormDefault="qualified">
 
+
     <xs:element name="GetStockPrice">
         <xs:complexType>
             <xs:sequence>
@@ -36,5 +37,28 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+
+
+    <xs:element name="CreateUser">
+        <xs:complexType>
+
+            <xs:sequence>
+                <xs:element name="UserName" type="xs:string"/>
+                <xs:element name="Password" type="xs:string"/>
+                <xs:element name="UserRole" type="xs:string"/>
+
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CreateUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Result" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
 
 </xs:schema>

@@ -5,9 +5,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
+import org.springframework.ws.server.EndpointInterceptor;
 import org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor;
+import org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor;
+import org.springframework.ws.soap.security.xwss.callback.SpringPlainTextPasswordValidationCallbackHandler;
 import org.springframework.ws.soap.server.endpoint.SoapFaultDefinition;
 import org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
@@ -16,12 +23,17 @@ import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 import ru.citydom.testwork.error.DetailSoapFaultDefinitionExceptionResolver;
 import ru.citydom.testwork.error.ServiceException;
+import ru.citydom.testwork.service.UserService;
+import ru.citydom.testwork.service.UserServiceImpl;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 @EnableWs
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
+
     @Bean
     public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
@@ -66,28 +78,42 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new PayloadLoggingInterceptor();
     }
 
-/*    @Bean
+    @Bean
     XwsSecurityInterceptor securityInterceptor() {
         XwsSecurityInterceptor securityInterceptor = new XwsSecurityInterceptor();
-
-        //securityInterceptor.setCallbackHandler(callbackHandler());
+        securityInterceptor.setCallbackHandler(callbackHandler());
         securityInterceptor.setPolicyConfiguration(new ClassPathResource("securityPolicy.xml"));
 
         return securityInterceptor;
-    }*/
+    }
 
-    /*
-    //SpringDigestPasswordValidationCallbackHandler
     @Bean
-    SimplePasswordValidationCallbackHandler callbackHandler() {
-        SimplePasswordValidationCallbackHandler callbackHandler = new SimplePasswordValidationCallbackHandler();
-        callbackHandler.setUsersMap(Collections.singletonMap("user", "password"));
-        return callbackHandler;
-    }*/
+    SpringPlainTextPasswordValidationCallbackHandler callbackHandler() {
+        SpringPlainTextPasswordValidationCallbackHandler callbackHandler = new SpringPlainTextPasswordValidationCallbackHandler();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userService());
 
-/*    @Override
+        ProviderManager manager = new ProviderManager(Collections.singletonList(provider));
+
+        callbackHandler.setAuthenticationManager(manager);
+        return callbackHandler;
+    }
+
+    @Bean
+    UserService userService(){
+        return new UserServiceImpl();
+    }
+
+    @Override
     public void addInterceptors(List<EndpointInterceptor> interceptors) {
-        interceptors.add(payloadLoggingInterceptor());
-        //interceptors.add(securityInterceptor());
-    }*/
+        //interceptors.add(payloadLoggingInterceptor());
+        interceptors.add(securityInterceptor());
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

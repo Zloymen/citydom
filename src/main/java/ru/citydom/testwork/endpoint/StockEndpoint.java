@@ -6,16 +6,12 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import ru.citydom.stock.GetStockPrice;
-import ru.citydom.stock.GetStockPriceResponse;
-import ru.citydom.stock.SetStockPrice;
-import ru.citydom.stock.SetStockPriceResponse;
+import ru.citydom.stock.*;
 import ru.citydom.testwork.entity.Stock;
 import ru.citydom.testwork.error.ServiceException;
 import ru.citydom.testwork.service.StockService;
+import ru.citydom.testwork.service.UserService;
 
-import javax.annotation.Resource;
-import javax.xml.ws.WebServiceContext;
 import java.math.BigDecimal;
 
 import static ru.citydom.testwork.error.ErrorEnum.*;
@@ -28,8 +24,7 @@ public class StockEndpoint {
 
     private final StockService stockService;
 
-    @Resource
-    WebServiceContext wsctxt;
+    private final UserService userService;
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "GetStockPrice")
     @ResponsePayload
@@ -47,16 +42,43 @@ public class StockEndpoint {
     @ResponsePayload
     public SetStockPriceResponse setStockPrice(@RequestPayload SetStockPrice request) {
         SetStockPriceResponse response = new SetStockPriceResponse();
+
+        if(!userService.currentUserIsAdmin()) throw new ServiceException(ACCESS_DENIED);
+
         String ind = request.getInd();
         String name = request.getStockName();
         Float price = request.getPrice();
         if(Strings.isNullOrEmpty(ind) || Strings.isNullOrEmpty(name)) throw  new ServiceException(PARAM_IS_NULL);
 
-        if(stockService.getByInd(ind) != null) throw new ServiceException(STOCK_IS_EXIST);
+        if(stockService.getByInd(ind) != null) throw new ServiceException(STOCK_IS_EXISTS);
 
-        stockService.save(new Stock(ind, name, new BigDecimal(price)));
+        stockService.save(new Stock(ind, name, BigDecimal.valueOf(price)));
 
+        response.setResult(1);
 
         return response;
     }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "CreateUser")
+    @ResponsePayload
+    public CreateUserResponse createUser(@RequestPayload CreateUser request) {
+        CreateUserResponse response = new CreateUserResponse();
+
+        if(!userService.currentUserIsAdmin()) throw new ServiceException(ACCESS_DENIED);
+
+        String username = request.getUserName();
+        String password = request.getPassword();
+
+        if(Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(password)) throw  new ServiceException(PARAM_IS_NULL);
+
+        if(userService.getByUsername(username) != null) throw  new ServiceException(USER_IS_EXISTS);
+
+        userService.create(username, password, request.getUserRole());
+
+        response.setResult(1);
+
+        return response;
+    }
+
+
 }

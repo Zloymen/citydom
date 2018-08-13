@@ -43,5 +43,79 @@
         </sql>
     </changeSet>
 
+    <changeSet author="zloy" id="130820181902">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_role"/>
+            </not>
+        </preConditions>
+        <comment>
+            initDB. create table user_role
+        </comment>
+        <createTable tableName="user_role">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="user_role_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="zloy" id="130820181903">
+        <comment>
+            add user
+        </comment>
+        <sql>
+            create table users(
+            id BIGSERIAL not null constraint users_pkey primary key,
+            username text not null,
+            password text not null,
+            is_account_non_expired boolean default true,
+            is_account_non_locked boolean default true,
+            is_credentials_non_expired boolean default true,
+            is_enabled boolean default true
+            );
+
+            create unique index users_username_uindex on users (username);
+
+            create table user_roles(
+            id BIGSERIAL not null constraint user_roles_pkey primary key,
+            users_id BIGSERIAL not null,
+            role_id integer not null,
+            CONSTRAINT userRoles_users_FK FOREIGN KEY (users_id) REFERENCES users(id),
+            CONSTRAINT userRoles_userRole_FK FOREIGN KEY (role_id) REFERENCES user_role(id)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet author="zloy" id="130820181904">
+        <comment>
+            add roles
+        </comment>
+        <sql>
+            insert into user_role(id, name) values (1,'admin'),(2, 'consumer');
+        </sql>
+    </changeSet>
+
+    <changeSet author="zloy" id="130820181905">
+        <comment>
+            add column isReplacePass into table users
+        </comment>
+        <addColumn tableName="users">
+            <column name="is_replace_pass" defaultValue="true" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="zloy" id="130820181906">
+        <comment>
+            add user admin
+        </comment>
+        <sql>
+            INSERT INTO users ( username, password) VALUES ('admin', '$2a$10$y1EZib/9a9hmQyZSNT0kNuKRbytqyA86adNvBuQ17C0vGOvRnbVGe');
+            insert into user_roles(users_id, role_id) values (1, 1), (1, 2);
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>

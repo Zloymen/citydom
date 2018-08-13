@@ -11,10 +11,10 @@
         </wsse:Security>
     </soapenv:Header>
     <soapenv:Body>
-        <gs:SetStockPrice>
-            <gs:Ind>SKLV</gs:Ind>
-            <gs:StockName>SKOLKOVO</gs:StockName>
-            <gs:Price>-999</gs:Price>
-        </gs:SetStockPrice>
+        <gs:CreateUser>
+            <gs:UserName>user</gs:UserName>
+            <gs:Password>user</gs:Password>
+            <gs:UserRole>consumer</gs:UserRole>
+        </gs:CreateUser>
     </soapenv:Body>
 </soapenv:Envelope>

@@ -8,7 +8,10 @@ public enum ErrorEnum {
 
     STOCK_NOT_FOUND(10, "stock not found"),
     PARAM_IS_NULL(20, "param is null"),
-    STOCK_IS_EXIST(30, "stock is exist")
+    STOCK_IS_EXISTS(30, "stock is exists"),
+    USER_IS_EXISTS(40, "user is exists"),
+    ROLE_NOT_FOUND(50, "role not found"),
+    ACCESS_DENIED(60, "access denied"),
     ;
 
     @Getter

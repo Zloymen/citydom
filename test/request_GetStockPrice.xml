@@ -1,9 +1,18 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:gs="http://citydom.ru/stock">
-    <soapenv:Header/>
+                  xmlns:gs="http://citydom.ru/stock"
+                  xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+>
+    <soapenv:Header>
+        <wsse:Security>
+            <wsse:UsernameToken>
+                <wsse:Username>admin</wsse:Username>
+                <wsse:Password>123456</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </soapenv:Header>
     <soapenv:Body>
         <gs:GetStockPrice>
-            <gs:StockName>Spain</gs:StockName>
+            <gs:StockName>IBM</gs:StockName>
         </gs:GetStockPrice>
     </soapenv:Body>
 </soapenv:Envelope>
