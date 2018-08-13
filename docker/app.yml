@@ -1,0 +1,17 @@
+version: '2'
+services:
+    citydom-app:
+        image: citydom/testwork:latest
+        #build: .
+        depends_on:
+            - citydom-postgresql
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://citydom-postgresql:5432/citydom
+            - SPRING_DATASOURCE_USERNAME=citydom
+            - SPRING_DATASOURCE_PASSWORD=citydom
+        ports:
+            - 8081:4400
+    citydom-postgresql:
+        extends:
+            file: postgresql.yml
+            service: citydom-postgresql

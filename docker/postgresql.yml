@@ -1,0 +1,10 @@
+version: '2'
+services:
+    citydom-postgresql:
+        image: postgres:9.6.5
+        environment:
+            - POSTGRES_USER=citydom
+            - POSTGRES_PASSWORD=citydom
+            - POSTGRES_DB=citydom
+        ports:
+            - 5431:5432

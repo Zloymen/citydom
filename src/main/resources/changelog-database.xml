@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet author="zloy" id="130820181900">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="stock"/>
+            </not>
+        </preConditions>
+        <comment>
+            add table stock
+        </comment>
+        <createTable tableName="stock">
+            <column name="id" type="bigserial" >
+                <constraints primaryKey="true" primaryKeyName="stock_pkey"/>
+            </column>
+            <column name="ind" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost" type="numeric(19, 4)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet author="zloy" id="130820181901">
+        <preConditions onFail="MARK_RAN">
+             <tableExists tableName="stock"/>
+        </preConditions>
+        <comment>
+            add test data into table stock
+        </comment>
+        <sql>
+            insert into stock(ind, name, cost) values('IBM', 'IBM', '100'), ('MSFT', 'Microsoft', '200'), ('APPLE', 'APPLE', '300'),
+            ('ORACLE', 'ORACLE', '400')
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

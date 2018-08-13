@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://citydom.ru/stock">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:GetStockPrice>
+            <gs:StockName>Spain</gs:StockName>
+        </gs:GetStockPrice>
+    </soapenv:Body>
+</soapenv:Envelope>

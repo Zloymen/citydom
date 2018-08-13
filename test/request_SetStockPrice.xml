@@ -1,0 +1,11 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://citydom.ru/stock">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:SetStockPrice>
+            <gs:Ind>SKLV</gs:Ind>
+            <gs:StockName>SKOLKOVO</gs:StockName>
+            <gs:Price>-999</gs:Price>
+        </gs:SetStockPrice>
+    </soapenv:Body>
+</soapenv:Envelope>

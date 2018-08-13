@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://citydom.ru/stock"
+           elementFormDefault="qualified">
+
+    <xs:element name="GetStockPrice">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="StockName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetStockPriceResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Price" type="xs:float"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SetStockPrice">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Ind" type="xs:string"/>
+                <xs:element name="StockName" type="xs:string"/>
+                <xs:element name="Price" type="xs:float"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="SetStockPriceResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Result" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
