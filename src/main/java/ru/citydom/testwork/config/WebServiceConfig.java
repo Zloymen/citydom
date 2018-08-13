@@ -107,7 +107,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
     @Override
     public void addInterceptors(List<EndpointInterceptor> interceptors) {
-        //interceptors.add(payloadLoggingInterceptor());
         interceptors.add(securityInterceptor());
     }
 

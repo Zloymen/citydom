@@ -24,20 +24,5 @@ public class ServiceApplication {
         SpringApplication.run(ServiceApplication.class, args);
     }
 
-/*    @Bean
-    public FilterRegistrationBean commonFilterRegistrationBean() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.addUrlPatterns("/*");
-        registration.setName("CommonFilter");
-        registration.setOrder(2);
-        CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
-        loggingFilter.setIncludeClientInfo(true);
-        loggingFilter.setIncludeQueryString(true);
-        loggingFilter.setIncludePayload(true);
-        loggingFilter.setIncludeHeaders(false);
-        registration.setFilter(loggingFilter);
-        return registration;
-    }*/
-
 
 }
